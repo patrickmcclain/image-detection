@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Reload Express Sample App</title>
+  </head>
+  <body>
+    <h1>Express Sample Test</h1>
+    <h2>With <code>"express"</code> npm package</h2>
+    <form action="/upload" enctype="multipart/form-data" method="post">
+      <div>Text field title: <input type="text" name="title" /></div>
+      <div>File: <input type="file" name="someExpressFiles" multiple="multiple" /></div>
+      <input type="submit" value="Upload" />
+    </form>
+    <!-- All you have to do is include the reload script and have it be on every page of your project -->
+    <!-- You do not create this route, reload creates it for you automatically -->
+    <script src="/reload/reload.js"></script>
+  </body>
+</html>
