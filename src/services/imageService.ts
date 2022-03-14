@@ -4,8 +4,9 @@ import path from 'path';
 import tmp from 'tmp';
 import { s3Client } from '../config/externalServices.config';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
-import { rekog, pool } from '../config/externalServices.config';
-import { DetectLabelsCommand } from '@aws-sdk/client-rekognition';
+import { rekog } from '../config/externalServices.config';
+import { DetectLabelsCommand, InvalidImageFormatException } from '@aws-sdk/client-rekognition';
+import { ErrorStatus } from '../utils/errors';
 
 export async function downloadImage(url) {
   const fileName = new URL(url).pathname.split('/').pop();
@@ -31,19 +32,17 @@ export async function uploadImage(filePath, fileKey) {
   
   const uploadParams = {
     Bucket: "pm2-image-recognition",
-    // Add the required 'Key' parameter using the 'path' module.
     Key: fileKey,
-    // Add the required 'Body' parameter
     Body: fileStream,
   };
 
   try {
     const data = await s3Client.send(new PutObjectCommand(uploadParams));
-    console.log("Success", data);
     return { ...data, fileKey };
   } catch (err) {
-    console.log("Error", err);
-    throw err;
+    console.log("Error: ", err);
+
+    throw new ErrorStatus("ServiceException: Image Upload Error", 500);
   }
 }
 
@@ -58,11 +57,18 @@ export async function analyzeImage(fileKey) {
   };
 
   try {
-    const data = await rekog.send(new DetectLabelsCommand(detectLabelsInput));
-    console.log("Success", data);
-    return data;
+    return await rekog.send(new DetectLabelsCommand(detectLabelsInput));
   } catch (err) {
-    console.log("Error", err);
-    throw err;
+    console.log("Error: ", err);
+
+    if (err instanceof InvalidImageFormatException) {
+      throw new ErrorStatus('ServiceException: Invalid Image Format (Only .jpg and .png are allowed)', 400);
+    }
+
+    throw new ErrorStatus("ServiceException: Image Recognition Error", 500);
   }
+}
+
+export function getImageUrl(fileKey) {
+  return 'https://pm2-image-recognition.s3.amazonaws.com/' + fileKey;
 }
