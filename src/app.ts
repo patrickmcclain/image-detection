@@ -25,11 +25,11 @@ app.get('/images', async (req, res) => {
   try {
     let allImages: ImageMetadata[] = [];
 
-    if (!labelSearch) {
-      allImages = await getAllImages();
-    } else {
+    if (labelSearch) {
       const labels = queryLabels.split(',');
       allImages = await getImagesByLabels(labels);
+    } else {
+      allImages = await getAllImages();
     }
 
     res.json({
