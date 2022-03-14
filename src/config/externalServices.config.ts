@@ -2,7 +2,7 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { RekognitionClient } from '@aws-sdk/client-rekognition';
 import pgp from 'pg-promise';
 
-// Normally these config values would be store elsewhere
+// Normally these config values would be stored elsewhere - somewhere secure
 
 export const s3Client = new S3Client({
   credentials: {
