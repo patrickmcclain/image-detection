@@ -40,7 +40,8 @@ export async function getImagesByLabels(labels: string[]): Promise<ImageMetadata
       SELECT i.id FROM image_label il 
       INNER JOIN image i ON i.id = il.image_id 
       WHERE il.label_id IN ($1:list) 
-      GROUP BY i.id`, [labels]);
+      GROUP BY i.id
+      HAVING COUNT(i.id) = $2`, [labels, labels.length]);
 
     return await Promise.all(images.map(image => getImage(image.id)));
   } catch (err) {
