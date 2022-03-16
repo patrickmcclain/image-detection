@@ -1,12 +1,14 @@
 import { db } from '../config/externalServices.config';
 import { ErrorStatus } from '../utils/errors';
 
+
 export type Image = {
   id?: number;
   name: string;
   label: string;
   url: string;
 };
+
 
 export async function insertImage(image: Image) {
   try {

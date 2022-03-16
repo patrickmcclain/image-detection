@@ -8,6 +8,14 @@ import { rekog } from '../config/externalServices.config';
 import { DetectLabelsCommand, InvalidImageFormatException } from '@aws-sdk/client-rekognition';
 import { ErrorStatus } from '../utils/errors';
 
+
+/**
+ * Downloads an Image from the provided url
+ * 
+ * @name downloadImage
+ * @function
+ * @param {string} url - Image Resource Location
+ */
 export async function downloadImage(url) {
   const fileName = new URL(url).pathname.split('/').pop();
   const path = tmp.fileSync({name: fileName}).name;
@@ -27,6 +35,15 @@ export async function downloadImage(url) {
   });
 }
 
+
+/**
+ * Uploads an Image to S3
+ * 
+ * @name uploadImage
+ * @function
+ * @param {string} filePath - Local file path of image uploaded
+ * @param {string} fileKey - Name / Label to store image as
+ */
 export async function uploadImage(filePath, fileKey) {
   const fileStream = fs.createReadStream(filePath);
   
@@ -46,6 +63,14 @@ export async function uploadImage(filePath, fileKey) {
   }
 }
 
+
+/**
+ * Analyzes an image in S3, using AWS Rekognition
+ * 
+ * @name analyzeImage
+ * @function
+ * @param {string} fileKey - Key used to retreive image in S3
+ */
 export async function analyzeImage(fileKey) {
   const detectLabelsInput = {
     Image: {
@@ -69,6 +94,14 @@ export async function analyzeImage(fileKey) {
   }
 }
 
+
+/**
+ * Utility function to get the S3 image URL
+ * 
+ * @name getImageUrl
+ * @function
+ * @param {string} fileKey - S3 image key
+ */
 export function getImageUrl(fileKey) {
   return 'https://pm2-image-recognition.s3.amazonaws.com/' + fileKey;
 }

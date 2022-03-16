@@ -2,11 +2,13 @@ import { db, pg } from '../config/externalServices.config';
 import { Label } from '../models/Label';
 import { ErrorStatus } from '../utils/errors';
 
+
 export type ImageLabel = {
   imageId: number | undefined;
   labelId: number | undefined;
   conf: number | undefined;
 };
+
 
 export async function insertImageLabels(imageLabels: ImageLabel[] | undefined) {
   if (!imageLabels || imageLabels.length == 0) return;

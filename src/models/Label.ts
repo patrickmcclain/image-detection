@@ -1,9 +1,11 @@
 import { db, pg } from '../config/externalServices.config';
 import { ErrorStatus } from '../utils/errors';
 
+
 export type Label = {
   name: string | undefined;
 };
+
 
 export async function insertLabels(labels: Label[] | undefined) {
   if (!labels || labels.length == 0) return;

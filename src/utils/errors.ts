@@ -1,5 +1,6 @@
 import { Response } from "express";
 
+
 export class ErrorStatus extends Error {
   status: number;
 
@@ -8,6 +9,7 @@ export class ErrorStatus extends Error {
     this.status = status;
   }
 }
+
 
 export function handleError(res: Response, err) {
   if (err instanceof ErrorStatus) {

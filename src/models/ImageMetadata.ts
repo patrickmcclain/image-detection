@@ -3,7 +3,12 @@ import { Label } from "./Label";
 import { db } from '../config/externalServices.config';
 import { ErrorStatus } from '../utils/errors';
 
-export type ImageMetadata = { image: Image, objects_identified: Label[] };
+
+export type ImageMetadata = { 
+  image: Image,
+  objects_identified: Label[]
+};
+
 
 export async function getImage(id: string | number): Promise<ImageMetadata> {
   try {
